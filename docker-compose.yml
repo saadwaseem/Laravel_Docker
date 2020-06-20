@@ -1,0 +1,86 @@
+version:  "3.7"
+services:
+  app:
+    env_file:
+      - .env
+    build:
+      args:
+        - PHP_VERSION=${PHP_VERSION}
+      context: ./
+      dockerfile: Dockerfile
+    image: laraapp
+    container_name: app
+    volumes:
+      - ./laraapp:/var/www/html
+    environment:
+      - LARAAPP_DB_NAME=${DB_NAME}
+      - LARAAPP_DB_USER=${DB_USER}
+      - LARAAPP_DB_PASSWORD=${DB_PASSWORD}
+      - LARAAPP_DB_HOST=${DB_HOST}
+    depends_on:
+      - mysql
+    links:
+      - mysql
+    networks:
+      - lara_network
+  mysql:
+    image: mysql:${DB_VERSION}
+    container_name: mysql
+    restart: unless-stopped
+    volumes:
+    - db:/var/lib/mysql
+    - ./docker-compose/mysql:/docker-entrypoint-initdb.d
+    ports:
+    - ${DB_PORT}:3306
+    environment:
+    - MYSQL_DATABASE=${DB_NAME}
+    - MYSQL_USER=${DB_USER}
+    - MYSQL_PASSWORD=${DB_PASSWORD}
+    - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    - SERVICE_TAGS=dev
+    - SERVICE_NAME=mysql
+    networks:
+    - lara_network
+  nginx:
+    image: nginx:${NGINX_VERSION}-alpine
+    container_name: nginx
+    ports:
+    - ${NGINX_PORT}:80
+    volumes:
+    - ./docker-compose/nginx/:/etc/nginx/conf.d
+    - ./laraapp:/var/www/html
+    networks:
+    - lara_network
+    depends_on:
+    - app
+    links:
+    - app
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:${PMA_VERSION}
+    ports:
+    - ${PMA_PORT}:80
+    environment:
+    - MYSQL_DATABASE=${DB_NAME}
+    - MYSQL_USER=${DB_USER}
+    - MYSQL_PASSWORD=${DB_PASSWORD}
+    - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    - PMA_HOST=${DB_HOST}
+    - PMA_PORT=${DB_PORT}
+    depends_on:
+    - mysql
+    links:
+    - mysql
+    networks:
+    - lara_network
+
+networks:
+  lara_network:
+    driver: bridge
+
+volumes:
+  db:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: $PWD/docker-compose/mysql/data

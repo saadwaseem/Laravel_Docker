@@ -1,0 +1,4 @@
+laraapp/*
+docker-compose/mysql/data
+docker-compose/mysql/data/*
+
