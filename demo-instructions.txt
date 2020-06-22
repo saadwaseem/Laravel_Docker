@@ -1,0 +1,75 @@
+Quick Overview of last session:
+Docker engine / containerd
+Docker client
+docker images 
+Docker containers
+docker volumes 
+docker network 
+
+Software Requirements:
+Docker Engine
+Docker Compose 
+Dive
+
+Starter:
+Lets start by pulling a nginx image 
+
+Simple command to run a container
+docker run --name training-nginx nginx:1.18-alpine
+
+without Volume mapping
+docker run --name training-nginx -d nginx:1.18-alpine
+
+with volume
+docker run --name training-nginx -v /some/content:/usr/share/nginx/html:ro -d nginx
+
+Demo:
+
+Documentation: https://docs.docker.com/
+
+Scratch => Debian ==> php:7.2-fpm => lara_image
+
+Multi-Stage Build(New) and builder pattern (Old)
+https://docs.docker.com/develop/develop-images/multistage-build/#use-an-external-image-as-a-stage
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+Pulls composer's official image and only extracts composer from it
+
+
+.env file - Best practice write once / use everywhere
+https://docs.docker.com/compose/env-file/
+
+Docker Compose
+https://docs.docker.com/compose/compose-file/compose-file-v2/
+Docker Compose file format version should be compatiable with docker engine version
+
+Explain step by step docker compose
+
+Build Image: 
+docker-compose build app
+
+This image will build an image named laraapp:latest
+Docker Caching will help building images faster through local caching system
+
+Lets expore layers
+Dive is system level utility can be used to inspect each layer of the container
+dive laraapp:latest
+
+Run all services via docker-compose up -d
+
+docker-compose ps 
+will list all the service containers running
+
+Lets execute a command inside the container / useful for alpine based containers that does not come with bash by default
+docker-compose exec lara_app ls -l
+
+Laravel Related commands
+install packages through composer
+docker-compose exec app composer install
+docker-compose exec app php artisan key:generate
+docker-compose exec app php artisan make:auth
+
+
+Helpful utilities that can be used:
+https://github.com/lirantal/dockly [Advance termincal]
+https://github.com/portainer/portainer [Dashboard for managing containers]
+
