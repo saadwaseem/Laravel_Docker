@@ -1,4 +1,26 @@
-laraapp/*
 docker-compose/mysql/data
 docker-compose/mysql/data/*
 
+/laraapp/vendor/
+/laraapp/node_modules/
+/laraapp/npm-debug.log
+/laraapp/yarn-error.log
+
+# Laravel 4 specific
+/laraapp/bootstrap/compiled.php
+/laraapp/app/storage/*
+
+# Laravel 5 & Lumen specific
+/laraapp/public/storage
+/laraapp/public/hot
+
+# Laravel 5 & Lumen specific with changed public path
+/laraapp/public_html/storage
+/laraapp/public_html/hot
+
+/laraapp/storage/*.key
+/laraapp/.env
+/laraapp/Homestead.yaml
+/laraapp/Homestead.json
+/laraapp//.vagrant
+/laraapp/.phpunit.result.cache
