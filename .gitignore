@@ -24,3 +24,8 @@ docker-compose/mysql/data/*
 /laraapp/Homestead.json
 /laraapp//.vagrant
 /laraapp/.phpunit.result.cache
+
+
+/laraapp/resources/views/auth
+/laraapp/resources/views/layout
+/laraapp/resources/views/home.blade.php
